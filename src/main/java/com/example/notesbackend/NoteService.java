@@ -40,20 +40,17 @@ public class NoteService {
     public void createNewNote(NoteCreateRequestDTO noteCreateRequestDTO) {
         validateData(noteCreateRequestDTO);
 
-        noteRepository.save(new Note(noteCreateRequestDTO.getTitle(), noteCreateRequestDTO.getContent(),
-                                     LocalDateTime.now(), LocalDateTime.now()));
+        Note note = new Note(noteCreateRequestDTO.getTitle(), noteCreateRequestDTO.getContent(),
+                             LocalDateTime.now(), LocalDateTime.now());
+        noteRepository.save(note);
         LOG.info("New note added to repository");
+
+        saveNoteVersion(note);
     }
 
     public void updateNote(Long id, NoteCreateRequestDTO noteCreateRequestDTO) {
         Note note = getNoteById(id);
         validateData(noteCreateRequestDTO);
-
-        Modification modification = new Modification(note.getTitle(), note.getContent(), note.getCreated(),
-                                                     note.getModified(), note.getId());
-
-        modificationRepository.save(modification);
-        LOG.info("Modification saved in repository");
 
         note.setTitle(noteCreateRequestDTO.getTitle());
         note.setContent(noteCreateRequestDTO.getContent());
@@ -61,6 +58,8 @@ public class NoteService {
 
         noteRepository.save(note);
         LOG.info("Updated note with id: " + id);
+
+        saveNoteVersion(note);
     }
 
     public void deleteNote(Long id) {   //TODO change to do not delete objects from database
@@ -70,6 +69,14 @@ public class NoteService {
 
     public List<Modification> getNoteHistory(Long id) {
         return modificationRepository.getAllByNoteId(id);
+    }
+
+    private void saveNoteVersion(Note note) {
+        Modification modification = new Modification(note.getTitle(), note.getContent(), note.getCreated(),
+                                                     note.getModified(), note.getId());
+
+        modificationRepository.save(modification);
+        LOG.info("Note version saved in repository");
     }
 
     private void validateData(NoteCreateRequestDTO noteCreateRequestDTO) {
