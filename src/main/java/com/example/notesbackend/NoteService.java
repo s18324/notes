@@ -55,6 +55,11 @@ public class NoteService {
         log.info("Updated note with id: " + id);
     }
 
+    public void deleteNote(Long id) {
+        if (noteRepository.existsById(id)) noteRepository.deleteById(id);
+        else throw new NoteNotFoundException();
+    }
+
     private void validateData(NoteCreateRequestDTO noteCreateRequestDTO) {
         if (noteCreateRequestDTO.getTitle() == null || noteCreateRequestDTO.getContent() == null) {
             log.warn("Note values can't be null");
