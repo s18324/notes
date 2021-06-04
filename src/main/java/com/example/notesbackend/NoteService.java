@@ -27,7 +27,7 @@ public class NoteService {
     public List<NoteDTO> getNotes() {
         List<NoteDTO> notes = new ArrayList<>();
 
-        for (Note note : noteRepository.findAll()) {
+        for (Note note : noteRepository.findAllByIsVisible(true)) {
             notes.add(modelMapper.map(note, NoteDTO.class));
         }
         return notes;
@@ -62,9 +62,10 @@ public class NoteService {
         saveNoteVersion(note);
     }
 
-    public void deleteNote(Long id) {   //TODO change to do not delete objects from database
-        if (noteRepository.existsById(id)) noteRepository.deleteById(id);
-        else throw new NoteNotFoundException();
+    public void deleteNote(Long id) {
+        Note note = getNoteById(id);
+        note.setVisible(false);
+        noteRepository.save(note);
     }
 
     public List<Modification> getNoteHistory(Long id) {
@@ -90,7 +91,7 @@ public class NoteService {
     }
 
     private Note getNoteById(Long id) {
-        Optional<Note> optionalNote = noteRepository.findById(id);
+        Optional<Note> optionalNote = noteRepository.findByIdAndIsVisible(id, true);
         if (optionalNote.isPresent()) {
             return optionalNote.get();
         } else {

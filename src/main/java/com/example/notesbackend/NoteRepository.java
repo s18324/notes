@@ -6,8 +6,8 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface NoteRepository extends CrudRepository<Note, Long> {
 
-    List<Note> findAll();
+    List<Note> findAllByIsVisible(Boolean isVisible);
 
-    Optional<Note> findById(Long id);
+    Optional<Note> findByIdAndIsVisible(Long id, Boolean isVisible);
 
 }

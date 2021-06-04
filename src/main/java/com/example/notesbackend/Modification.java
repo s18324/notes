@@ -3,13 +3,14 @@ package com.example.notesbackend;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class Modification {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
@@ -31,6 +32,14 @@ public class Modification {
         this.created = created;
         this.modified = modified;
         this.noteId = noteId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {

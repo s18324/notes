@@ -10,7 +10,7 @@ import javax.persistence.Id;
 public class Note {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
@@ -21,6 +21,8 @@ public class Note {
 
     private LocalDateTime modified;
 
+    private Boolean isVisible;
+
     protected Note() {
     }
 
@@ -29,6 +31,7 @@ public class Note {
         this.content = content;
         this.created = created;
         this.modified = modified;
+        this.isVisible = true;
     }
 
     public void setTitle(String title) {
@@ -41,6 +44,14 @@ public class Note {
 
     public void setModified(LocalDateTime modified) {
         this.modified = modified;
+    }
+
+    public Boolean getVisible() {
+        return isVisible;
+    }
+
+    public void setVisible(Boolean visible) {
+        isVisible = visible;
     }
 
     public Long getId() {
