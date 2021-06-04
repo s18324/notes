@@ -40,4 +40,9 @@ public class NoteController {
         noteService.deleteNote(id);
     }
 
+    @GetMapping("/history/{id}")
+    public List<Modification> getNoteHistory(@PathVariable Long id) {
+        return noteService.getNoteHistory(id);
+    }
+
 }

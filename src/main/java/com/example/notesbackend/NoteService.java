@@ -14,12 +14,14 @@ import org.springframework.stereotype.Service;
 public class NoteService {
 
     private final NoteRepository noteRepository;
+    private final ModificationRepository modificationRepository;
     private final ModelMapper modelMapper = new ModelMapper();
-    private static final Logger log = LoggerFactory.getLogger(NotesBackendApplication.class);
+    private static final Logger LOG = LoggerFactory.getLogger(NotesBackendApplication.class);
 
     @Autowired
-    public NoteService(NoteRepository noteRepository) {
+    public NoteService(NoteRepository noteRepository, ModificationRepository modificationRepository) {
         this.noteRepository = noteRepository;
+        this.modificationRepository = modificationRepository;
     }
 
     public List<NoteDTO> getNotes() {
@@ -40,32 +42,42 @@ public class NoteService {
 
         noteRepository.save(new Note(noteCreateRequestDTO.getTitle(), noteCreateRequestDTO.getContent(),
                                      LocalDateTime.now(), LocalDateTime.now()));
-        log.info("New note added to repository");
+        LOG.info("New note added to repository");
     }
 
     public void updateNote(Long id, NoteCreateRequestDTO noteCreateRequestDTO) {
-        Note note = getNoteById(id);    //TODO add note to history
+        Note note = getNoteById(id);
         validateData(noteCreateRequestDTO);
+
+        Modification modification = new Modification(note.getTitle(), note.getContent(), note.getCreated(),
+                                                     note.getModified(), note.getId());
+
+        modificationRepository.save(modification);
+        LOG.info("Modification saved in repository");
 
         note.setTitle(noteCreateRequestDTO.getTitle());
         note.setContent(noteCreateRequestDTO.getContent());
         note.setModified(LocalDateTime.now());
 
         noteRepository.save(note);
-        log.info("Updated note with id: " + id);
+        LOG.info("Updated note with id: " + id);
     }
 
-    public void deleteNote(Long id) {
+    public void deleteNote(Long id) {   //TODO change to do not delete objects from database
         if (noteRepository.existsById(id)) noteRepository.deleteById(id);
         else throw new NoteNotFoundException();
     }
 
+    public List<Modification> getNoteHistory(Long id) {
+        return modificationRepository.getAllByNoteId(id);
+    }
+
     private void validateData(NoteCreateRequestDTO noteCreateRequestDTO) {
         if (noteCreateRequestDTO.getTitle() == null || noteCreateRequestDTO.getContent() == null) {
-            log.warn("Note values can't be null");
+            LOG.warn("Note values can't be null");
             throw new EmptyNoteException();
         } else if (noteCreateRequestDTO.getTitle().isEmpty() || noteCreateRequestDTO.getContent().isEmpty()) {
-            log.warn("Note values can't be empty");
+            LOG.warn("Note values can't be empty");
             throw new EmptyNoteException();
         }
     }
@@ -75,7 +87,7 @@ public class NoteService {
         if (optionalNote.isPresent()) {
             return optionalNote.get();
         } else {
-            log.warn("Note with id: " + id + " not found");
+            LOG.warn("Note with id: " + id + " not found");
             throw new NoteNotFoundException();
         }
     }
