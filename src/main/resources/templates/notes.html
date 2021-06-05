@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Notes</title>
+</head>
+<body>
+<h1>Notes</h1>
+
+<tr th:each="note: ${notes}">
+    <td th:text="${note.getTitle()}"></td>
+    <td th:text="${note.getCreated()}"></td>
+    <td th:text="${note.getModified()}"></td>
+</tr>
+
+</body>
+</html>
