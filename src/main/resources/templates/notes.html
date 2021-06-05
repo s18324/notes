@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Notes</title>
@@ -7,11 +7,23 @@
 <body>
 <h1>Notes</h1>
 
-<tr th:each="note: ${notes}">
-    <td th:text="${note.getTitle()}"></td>
-    <td th:text="${note.getCreated()}"></td>
-    <td th:text="${note.getModified()}"></td>
-</tr>
+<table>
+    <thread>
+        <th>Title</th>
+        <th>Created</th>
+        <th>Modified</th>
+    </thread>
+    <tbody>
+    <tr th:if="${notes.empty}">
+        <td colspan="2">You don't have any notes</td>
+    </tr>
+    <tr th:each="note: ${notes}">
+        <td><span th:text="${note.getTitle()}">Title</span></td>
+        <td><span th:text="${note.getCreated()}">Created</span></td>
+        <td><span th:text="${note.getModified()}">Modified</span></td>
+    </tr>
+    </tbody>
+</table>
 
 </body>
 </html>
