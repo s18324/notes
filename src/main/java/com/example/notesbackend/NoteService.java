@@ -8,15 +8,16 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
 public class NoteService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(NotesBackendApplication.class);
     private final NoteRepository noteRepository;
     private final ModificationRepository modificationRepository;
     private final ModelMapper modelMapper = new ModelMapper();
-    private static final Logger LOG = LoggerFactory.getLogger(NotesBackendApplication.class);
 
     @Autowired
     public NoteService(NoteRepository noteRepository, ModificationRepository modificationRepository) {
@@ -24,12 +25,42 @@ public class NoteService {
         this.modificationRepository = modificationRepository;
     }
 
-    public List<NoteDTO> getNotes() {
+    public List<NoteDTO> getNotes(String sortColumn, String sortDirection) {
         List<NoteDTO> notes = new ArrayList<>();
 
-        for (Note note : noteRepository.findAllByIsVisible(true)) {
-            notes.add(modelMapper.map(note, NoteDTO.class));
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortColumn).ascending() :
+                Sort.by(sortColumn).descending();
+
+        if (sortColumn.equals("title") && sortDirection.equals("asc")) {
+            for (Note note : noteRepository.findAllByIsVisibleOrderByTitleAsc(true)) {
+                notes.add(modelMapper.map(note, NoteDTO.class));
+            }
+        } else if (sortColumn.equals("title") && sortDirection.equals("desc")) {
+            for (Note note : noteRepository.findAllByIsVisibleOrderByTitleDesc(true)) {
+                notes.add(modelMapper.map(note, NoteDTO.class));
+            }
+        } else if (sortColumn.equals("created") && sortDirection.equals("asc")) {
+            for (Note note : noteRepository.findAllByIsVisibleOrderByCreatedAsc(true)) {
+                notes.add(modelMapper.map(note, NoteDTO.class));
+            }
+        } else if (sortColumn.equals("created") && sortDirection.equals("desc")) {
+            for (Note note : noteRepository.findAllByIsVisibleOrderByCreatedDesc(true)) {
+                notes.add(modelMapper.map(note, NoteDTO.class));
+            }
+        } else if (sortColumn.equals("modified") && sortDirection.equals("asc")) {
+            for (Note note : noteRepository.findAllByIsVisibleOrderByModifiedAsc(true)) {
+                notes.add(modelMapper.map(note, NoteDTO.class));
+            }
+        } else if (sortColumn.equals("modified") && sortDirection.equals("desc")) {
+            for (Note note : noteRepository.findAllByIsVisibleOrderByModifiedDesc(true)) {
+                notes.add(modelMapper.map(note, NoteDTO.class));
+            }
         }
+
+        /*for (Note note : noteRepository.findAll(sort)) {
+            notes.add(modelMapper.map(note, NoteDTO.class));
+        }*/
+
         return notes;
     }
 

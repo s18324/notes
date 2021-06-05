@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping(path = "notes")
@@ -17,7 +18,18 @@ public class NoteController {
 
     @GetMapping
     public String getNotes(Model model) {
-        model.addAttribute("notes", noteService.getNotes());
+        return getNotesSorted(model, "created", "desc");
+    }
+
+    @GetMapping("/list")
+    public String getNotesSorted(Model model, @RequestParam("sortColumn") String sortColumn,
+                                 @RequestParam("sortDirection") String sortDirection) {
+
+        model.addAttribute("notes", noteService.getNotes(sortColumn, sortDirection));
+        model.addAttribute("sortColumn", sortColumn);
+        model.addAttribute("sortDirection", sortDirection);
+        model.addAttribute("reverseSortDirection", sortDirection.equals("asc") ? "desc" : "asc");
+
         return "notes";
     }
 

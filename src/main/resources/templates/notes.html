@@ -3,27 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Notes</title>
+    <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" rel="stylesheet">
 </head>
 <body>
-<h1>Notes</h1>
-
-<table>
-    <thread>
-        <th>Title</th>
-        <th>Created</th>
-        <th>Modified</th>
-    </thread>
-    <tbody>
-    <tr th:if="${notes.empty}">
-        <td colspan="2">You don't have any notes</td>
-    </tr>
-    <tr th:each="note: ${notes}">
-        <td><span th:text="${note.getTitle()}">Title</span></td>
-        <td><span th:text="${note.getCreated()}">Created</span></td>
-        <td><span th:text="${note.getModified()}">Modified</span></td>
-    </tr>
-    </tbody>
-</table>
-
+<div class="container my-4" th:align="center">
+    <h1>Notes</h1>
+    <table border="1" class="table table-responsive-md">
+        <thead class="thead-dark">
+        <th>
+            <a style="color: white"
+               th:href="@{'/notes/list/' + '?sortColumn=title&sortDirection=' + ${reverseSortDirection}}">
+                Title</a>
+        </th>
+        <th>
+            <a style="color: white"
+               th:href="@{'/notes/list/' + '?sortColumn=created&sortDirection=' + ${reverseSortDirection}}">
+                Created</a>
+        </th>
+        <th>
+            <a style="color: white"
+               th:href="@{'/notes/list/' + '?sortColumn=modified&sortDirection=' + ${reverseSortDirection}}">
+                Modified</a>
+        </th>
+        </thead>
+        <tbody>
+        <tr th:if="${notes.empty}">
+            <td colspan="2">You don't have any notes</td>
+        </tr>
+        <tr th:each="note: ${notes}">
+            <td><span th:text="${note.getTitle()}">Title</span></td>
+            <td><span th:text="${note.getCreated()}">Created</span></td>
+            <td><span th:text="${note.getModified()}">Modified</span></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
