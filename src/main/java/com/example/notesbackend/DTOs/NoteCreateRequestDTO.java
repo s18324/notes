@@ -1,4 +1,4 @@
-package com.example.notesbackend;
+package com.example.notesbackend.DTOs;
 
 public class NoteCreateRequestDTO {
 

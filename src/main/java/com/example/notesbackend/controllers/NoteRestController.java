@@ -1,8 +1,12 @@
-package com.example.notesbackend;
+package com.example.notesbackend.controllers;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.example.notesbackend.DTOs.NoteCreateRequestDTO;
+import com.example.notesbackend.DTOs.NoteDTO;
+import com.example.notesbackend.Modification;
+import com.example.notesbackend.NoteService;
 
 @RestController
 @RequestMapping(path = "notes")

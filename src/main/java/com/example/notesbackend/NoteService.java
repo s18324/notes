@@ -8,8 +8,13 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import com.example.notesbackend.DTOs.NoteCreateRequestDTO;
+import com.example.notesbackend.DTOs.NoteDTO;
+import com.example.notesbackend.exceptions.EmptyNoteException;
+import com.example.notesbackend.exceptions.NoteNotFoundException;
+import com.example.notesbackend.repositories.ModificationRepository;
+import com.example.notesbackend.repositories.NoteRepository;
 
 @Service
 public class NoteService {
@@ -27,9 +32,6 @@ public class NoteService {
 
     public List<NoteDTO> getNotes(String sortColumn, String sortDirection) {
         List<NoteDTO> notes = new ArrayList<>();
-
-        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortColumn).ascending() :
-                Sort.by(sortColumn).descending();
 
         if (sortColumn.equals("title") && sortDirection.equals("asc")) {
             for (Note note : noteRepository.findAllByIsVisibleOrderByTitleAsc(true)) {
@@ -56,10 +58,6 @@ public class NoteService {
                 notes.add(modelMapper.map(note, NoteDTO.class));
             }
         }
-
-        /*for (Note note : noteRepository.findAll(sort)) {
-            notes.add(modelMapper.map(note, NoteDTO.class));
-        }*/
 
         return notes;
     }
