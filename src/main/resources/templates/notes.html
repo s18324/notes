@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <title>Notes</title>
     <style>
-        /* The Modal (background) */
         .modal {
             display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
+            position: center; /* Stay in place */
             z-index: 1; /* Sit on top */
-            padding-top: 100px; /* Location of the box */
-            left: 0;
-            top: 0;
+            padding-top: 100px;
+            padding-left: 100px;
+            padding-right: 100px;
             width: 100%; /* Full width */
             height: 100%; /* Full height */
             overflow: auto; /* Enable scroll if needed */
@@ -19,7 +18,6 @@
             background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
         }
 
-        /* Modal Content */
         .modal-content {
             background-color: #fefefe;
             margin: auto;
@@ -28,7 +26,6 @@
             width: 40%;
         }
 
-        /* The Close Button */
         .close {
             color: #aaaaaa;
             float: right;
@@ -49,33 +46,6 @@
 
 <div class="container my-4" th:align="center">
     <h1>Notes</h1>
-
-    <!-- The Modal -->
-    <div class="modal" id="myModal">
-        <!-- Modal content -->
-        <div class="modal-content">
-            <span class="close" th:align="right">&times;</span>
-            <h1></h1>
-        </div>
-    </div>
-
-    <script>
-        var modal = document.getElementById('myModal');
-        var span = document.getElementsByClassName("close")[0];
-
-        function tdclick() {
-            modal.style.display = "block";
-        }
-
-        span.onclick = function () {
-            modal.style.display = "none";
-        }
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    </script>
 
     <table border="1" class="table table-responsive-md">
         <thead class="thead-dark">
@@ -103,6 +73,31 @@
             <td onclick="tdclick()"><span th:text="${note.getTitle()}">Title</span></td>
             <td><span th:text="${note.getCreated()}">Created</span></td>
             <td><span th:text="${note.getModified()}">Modified</span></td>
+
+            <div class="modal" id="myModal">
+                <div class="modal-content">
+                    <span class="close" th:align="right">&times;</span>
+                    <p th:text="${note.getContent()}"></p>
+                </div>
+            </div>
+
+            <script>
+                var modal = document.getElementById('myModal');
+                var span = document.getElementsByClassName("close")[0];
+
+                function tdclick() {
+                    modal.style.display = "block";
+                }
+
+                span.onclick = function () {
+                    modal.style.display = "none";
+                }
+                window.onclick = function (event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                }
+            </script>
         </tr>
         </tbody>
     </table>

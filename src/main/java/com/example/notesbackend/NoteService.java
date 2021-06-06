@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.notesbackend.DTOs.NoteCreateRequestDTO;
 import com.example.notesbackend.DTOs.NoteDTO;
-import com.example.notesbackend.exceptions.EmptyNoteException;
+import com.example.notesbackend.exceptions.BadRequestException;
 import com.example.notesbackend.exceptions.NoteNotFoundException;
 import com.example.notesbackend.repositories.ModificationRepository;
 import com.example.notesbackend.repositories.NoteRepository;
@@ -112,10 +112,10 @@ public class NoteService {
     private void validateData(NoteCreateRequestDTO noteCreateRequestDTO) {
         if (noteCreateRequestDTO.getTitle() == null || noteCreateRequestDTO.getContent() == null) {
             LOG.warn("Note values can't be null");
-            throw new EmptyNoteException();
+            throw new BadRequestException();
         } else if (noteCreateRequestDTO.getTitle().isEmpty() || noteCreateRequestDTO.getContent().isEmpty()) {
             LOG.warn("Note values can't be empty");
-            throw new EmptyNoteException();
+            throw new BadRequestException();
         }
     }
 
