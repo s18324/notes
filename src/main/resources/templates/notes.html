@@ -70,31 +70,40 @@
             <td colspan="2">You don't have any notes</td>
         </tr>
         <tr th:each="note: ${notes}">
-            <td onclick="tdclick()"><span th:text="${note.getTitle()}">Title</span></td>
+            <td th:onclick="'javascript:openPopup(' + ${note.getId()} + ');'"><span
+                    th:text="${note.getTitle()}">Title</span></td>
             <td><span th:text="${note.getCreated()}">Created</span></td>
             <td><span th:text="${note.getModified()}">Modified</span></td>
 
-            <div class="modal" id="myModal">
+            <div class="modal" th:id="'myModal' + ${note.getId()}">
                 <div class="modal-content">
-                    <span class="close" th:align="right">&times;</span>
+                    <span class="close" th:onclick="closePopup()" th:align="right">&times;</span>
                     <p th:text="${note.getContent()}"></p>
                 </div>
             </div>
 
             <script>
-                var modal = document.getElementById('myModal');
+                var modal = undefined
                 var span = document.getElementsByClassName("close")[0];
 
-                function tdclick() {
-                    modal.style.display = "block";
+                function openPopup(noteId) {
+                    if (modal === undefined) {
+                        console.log(noteId)
+                        console.log(document.getElementById("myModal" + noteId))
+                        modal = document.getElementById("myModal" + noteId)
+                        modal.style.display = "block";
+                    }
                 }
 
-                span.onclick = function () {
+                function closePopup() {
                     modal.style.display = "none";
+                    modal = undefined
                 }
+
                 window.onclick = function (event) {
                     if (event.target == modal) {
                         modal.style.display = "none";
+                        modal = undefined
                     }
                 }
             </script>
