@@ -14,6 +14,11 @@ public class NoteRestController {
 
     private final NoteService noteService;
 
+    @GetMapping("/all")
+    public List<NoteDTO> getAllNotes() {
+        return noteService.getNotes("created", "desc");
+    }
+
     @Autowired
     public NoteRestController(NoteService noteService) {
         this.noteService = noteService;

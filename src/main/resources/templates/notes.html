@@ -5,17 +5,15 @@
     <title>Notes</title>
     <style>
         .modal {
-            display: none; /* Hidden by default */
-            position: center; /* Stay in place */
-            z-index: 1; /* Sit on top */
-            padding-top: 100px;
-            padding-left: 100px;
-            padding-right: 100px;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgb(0, 0, 0); /* Fallback color */
-            background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+            display: none;
+            position: center;
+            z-index: 1;
+            padding: 100px;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
         }
 
         .modal-content {
@@ -70,21 +68,21 @@
             <td colspan="2">You don't have any notes</td>
         </tr>
         <tr th:each="note: ${notes}">
+
             <td th:onclick="'javascript:openPopup(' + ${note.getId()} + ');'"><span
                     th:text="${note.getTitle()}">Title</span></td>
-            <td><span th:text="${note.getCreated()}">Created</span></td>
-            <td><span th:text="${note.getModified()}">Modified</span></td>
+            <td><span th:text="${#temporals.format(note.getCreated(), 'dd-MM-yyyy HH:mm:ss')}">Created</span></td>
+            <td><span th:text="${#temporals.format(note.getModified(), 'dd-MM-yyyy HH:mm:ss')}">Modified</span></td>
 
             <div class="modal" th:id="'myModal' + ${note.getId()}">
                 <div class="modal-content">
-                    <span class="close" th:onclick="closePopup()" th:align="right">&times;</span>
+                    <span class="close" th:align="right" th:onclick="closePopup()">&times;</span>
                     <p th:text="${note.getContent()}"></p>
                 </div>
             </div>
 
             <script>
                 var modal = undefined
-                var span = document.getElementsByClassName("close")[0];
 
                 function openPopup(noteId) {
                     if (modal === undefined) {
